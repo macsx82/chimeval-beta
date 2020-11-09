@@ -2117,8 +2117,6 @@ cp /genedata/cocca/analyses/michelangelo/REG_TAB/*.* ${regions}
 
 
 ```bash
-maf=0.45
-
 for maf in 0.01
 do
 
