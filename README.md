@@ -1,6 +1,7 @@
 #7/03/2017
 
 Run the extraction for all the different population subset
+
 ```bash
 for chr in {1..22}
 do
@@ -22,6 +23,7 @@ done
 ```
 
 Now extract blocks with genotypes
+
 ```bash
 for n_snp in 4 5 6
 
@@ -53,6 +55,7 @@ done
 Rerun the scripts using MAF threshold >= 0 and at least 5 informative SNPs per block
 
 Run the extraction for all the different population subset
+
 ```bash
 for chr in {1..22}
 do
@@ -75,6 +78,7 @@ done
 ```
 
 Now extract blocks with genotypes
+
 ```bash
 for n_snp in 4 5 6
 
@@ -184,6 +188,7 @@ done
 Extract new amplicon list
 
 First extract the needed regions:
+
 ```bash
 for chr in {1..22}
 do
@@ -216,7 +221,8 @@ done
 done
 ```
 
-#######################################################
+---
+
 #calculate blocks on the data filtered by linkage
 
 ```bash
@@ -394,6 +400,7 @@ done
 ---
 #2/03/2018
 Extract data with MEA's list
+
 ```bash
 maf=0.45
 pop=EUR
@@ -518,10 +525,11 @@ done
 done
 ```
 
-################################################
+---
 Reads trimming:
 
 first, go back to FASTA:
+
 ```bash
 for bam_file in `ls *.bam`
 do 
@@ -545,6 +553,7 @@ cnt=0				#contamination
 maa=3				#max alternate alleles
 bs=50				#batch size
 rt=1				#read thread
+
 ```bash
 fastq_path=/home/cocca/analyses/michelangelo/chimerismo/20AMP/trimmed_reads/fastq
 
@@ -603,8 +612,9 @@ echo "samtools view -h -m 100 ${final_out_path}/${outname} -b -o ${read_filt_out
 
 done
 ```
-##########################################
+---
 Run chimeval on the filtered data
+
 ```bash
 out_path=/home/cocca/analyses/michelangelo/chimerismo/20AMP/trimmed_reads/sorted_bam/100bp_length/chimeval_blocks
 mkdir -p ${out_path}
@@ -618,8 +628,9 @@ done
 ```
 
 
-####################################
+---
 create start end amplicon region bed files
+
 ```bash
 while read ampl
 do
@@ -635,8 +646,9 @@ echo -e "${chr}\t${start}\t${end}" > 4HotSpot_IAD132502_181_40amp_mod1_${ampl}_s
 done < 4HotSpot_IAD132502_181_40amp.list
 
 ```
-####################################
+---
 phase bams
+
 ```bash
 out_path=/home/cocca/analyses/michelangelo/chimerismo/20AMP/trimmed_reads/sorted_bam/100bp_length/phased_bam
 mkdir -p ${out_path}
@@ -651,8 +663,9 @@ echo "samtools phase -b ${out_path}/${sample_name} ${bam_file}"| qsub -N phase_b
 done
 ```
 
-###################################
+---
 Extract regions from bam files
+
 ```bash
 for ampl in `cat /home/cocca/analyses/michelangelo/chimerismo/4HotSpot_IAD132502_181_40amp.list`
 do
@@ -679,6 +692,7 @@ done
 
 ##########################################
 Run chimeval on the amplicon filtered data with and without exclusion of non hom blocks
+
 ```bash
 for mode_set in HOM
 do
@@ -696,6 +710,7 @@ done
 ```
 ####################################################################
 Run chimeval on the unfiltered data but with the exclusion of non hom blocks
+
 ```bash
 for mode_set in HOM ALL
 do
@@ -775,6 +790,7 @@ done
 #12/07/2018
 
 phase bams
+
 ```bash
 out_path=/home/cocca/analyses/michelangelo/chimerismo/20AMP/trimmed_reads/sorted_bam/100bp_length/12072018_phased_bam
 bam_file=chimera_01.bam
@@ -812,8 +828,9 @@ done
 done
 ```
 
-############################
+---
 file bam check:
+
 ```bash
 for bam_file in *.bam
 do
@@ -877,8 +894,10 @@ done
 done
 ```
 
-############################################################################
+---
+
 Extract from Chimera bam file the reads overlapping to the informative snps (or the complete amplicon)
+
 ```bash
 bam writeRegion --in RIC_0%.bam --out region_test --bamIndex RIC_0%.bai --bed /home/cocca/analyses/michelangelo/chimerismo/06092018/BED_FILES/SNPS/test_region.bed
 bam writeRegion --in RIC_100.bam --out region_test_RIC100 --bamIndex RIC_100.bai --bed /home/cocca/analyses/michelangelo/chimerismo/06092018/BED_FILES/SNPS/test_region.bed
@@ -891,22 +910,17 @@ c_ind=(c_pos_arr[i]-start_pos+1); printf("%s|",seq[c_ind]) };print "";
 }' | sort | uniq -c |sort -g -r |more
 
 
-
 samtools view region_test_RIC100| cut -f 4,10 | awk -v c_pos="${current_pos[*]}" 'BEGIN{split(c_pos,c_pos_arr," ");}{
 start_pos=$1;split($2, seq, ""); i=1;c_ind=(c_pos_arr[i]-start_pos+1); printf("%s %s %s",seq[c_ind],c_pos_arr[i],c_ind);print ""
 }' | cut -f 1 -d " "|sort | uniq -c |sort -g -r |more
-}' | more
-
 
 
 samtools view region_test_RIC100_samtools| cut -f 4,10 | awk -v c_pos="${current_pos[*]}" 'BEGIN{split(c_pos,c_pos_arr," ");}{
 start_pos=$1;split($2, seq, ""); i=1;c_ind=(c_pos_arr[i]-start_pos+1); printf("%s %s %s",seq[c_ind],c_pos_arr[i],c_ind);print ""
 }' | cut -f 1 -d " "|sort | uniq -c |sort -g -r |more
-}' | more
 
 
-
-}' | cut -f 1 -d " "|sort | uniq -c |sort -g -r |more
+# }' | cut -f 1 -d " "|sort | uniq -c |sort -g -r |more
 
 # chr15   31405284        31405285        rs7170825       A G 
 # chr15   31405377        31405378        rs12907809      C T 
@@ -930,7 +944,9 @@ echo "here is a string" | awk '
 
 
 print i,c_pos_arr[i],c_ind,seq[c_ind]
+
 ```
+
 ---
 #2/11/2018
 
@@ -984,8 +1000,8 @@ done
 done
 ```
 
----
 
+---
 #3/11/2018
 
 Steps to replicate chimeval counts and genotyping :
@@ -1006,6 +1022,7 @@ Extract only read overlapping each position
 
 for configuration R_D_D
     - use the appropriate bed file in /home/cocca/analyses/michelangelo/chimerismo/06092018/BED_FILES/SNPS/R_D_D.bed
+
 ```bash
 amplicon_base=/home/cocca/analyses/michelangelo/chimerismo/06092018/BED_FILES/SNPS
 
@@ -1024,6 +1041,7 @@ done
 ```
 
 - Now get the reads for each sample in wich we have all informative snps
+
 ```bash
 
 # sample=RIC_100
@@ -1069,6 +1087,7 @@ samtools view -L <(head -1 ${amplicon_base}/${triplet}/chimeval_HLAandNOHLA_INFO
 #20/01/2019
 
 Test HLAminer
+
 ```bash
 input_bam=/home/cocca/analyses/michelangelo/chimerismo/06092018/RIC_100.bam
 
@@ -1090,6 +1109,7 @@ out_dir= ~/analyses/michelangelo/HLA
 #25/01/2019
 
 Test HLA-HD
+
 ```bash
 /home/cocca/softwares/hlahd.1.2.0.1/bin/hlahd.sh -m 100 -c 0.95 -f ~/softwares/hlahd.1.2.0.1/freq_data/ ~/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_100_r0.fq ~/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_100_r0.fq /home/cocca/softwares/hlahd.1.2.0.1/HLA_gene.split.txt /home/cocca/softwares/hlahd.1.2.0.1/dictionary/ RIC_100 ~/analyses/michelangelo/chimerismo/HLA/test_hla_hd/ric_100_test/
 ```
@@ -1128,12 +1148,14 @@ echo "/home/cocca/softwares/hlahd.1.2.0.1/bin/hlahd_SE.sh -t 32 -m 100 -c 0.95 -
 Align all using bowtie2
 
 First, create a bowtie index of the reference
+
 ```bash
 bowtie2-build custom_fasta_PCR11_19.fasta custom_fasta_PCR11_19
 ```
 Now, align the test file to the data:
 
 Test 1 - no k option set:
+
 ```bash
 	bowtie2 --local --very-sensitive-local --mm -x ../REF_FASTA/custom_fasta_PCR11_19 -U ../06092018/FASTQ/RIC_100_r0.fq -3 20 -5 20 --n-ceil L,0,0.5 --no-unal -S RIC_100_test_noK.sam
 ```
@@ -1146,7 +1168,8 @@ Test 1 - no k option set:
 
 
 Test 2 - k option set to 1:
-	```bash
+
+```bash
     bowtie2 --local --very-sensitive-local --mm -x ../REF_FASTA/custom_fasta_PCR11_19 -U ../06092018/FASTQ/RIC_100_r0.fq -3 20 -5 20 --n-ceil L,0,0.5 -k 1 --no-unal -S RIC_100_test_k1.sam
     ```
 
@@ -1158,6 +1181,7 @@ Test 2 - k option set to 1:
 *5.93% overall alignment rate
 
 Run all alignment:
+
 ```bash
 for sample in RIC_100 RIC_0% RIC_1% RIC_01%
 do
@@ -1192,6 +1216,7 @@ We need to:
 
 
 Test script 01: 
+
 ```bash
 for s_name in 
 for s_name in RIC_0% RIC_100 RIC_0%
@@ -1208,6 +1233,7 @@ base_out=~/analyses/michelangelo/chimerismo/NON_HLA/test_14022019
 done
 ```
 Test script 02:
+
 ```bash
 base_folder=~/analyses/michelangelo/chimerismo/NON_HLA
 sample=/home/cocca/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_01%_r0.fq
@@ -1239,6 +1265,7 @@ base_out=~/analyses/michelangelo/chimerismo/NON_HLA/test_14022019
 done
 ```
 Test script 02:
+
 ```bash
 base_folder=~/analyses/michelangelo/chimerismo/NON_HLA
 sample=/home/cocca/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_01%_r0.fq
@@ -1254,6 +1281,7 @@ ric_100_counts=/home/cocca/analyses/michelangelo/chimerismo/NON_HLA/test_1402201
 #22/02/2019
 
 Check HLA outcome:
+
 ```bash
 bowtie2-build HLA_ALL_ex2_ex3_nodup.fasta HLA_ALL_ex2_ex3_nodup
 ```
@@ -1307,6 +1335,7 @@ done
 ```
 
 Test script 02:
+
 ```bash
 base_folder=~/analyses/michelangelo/chimerismo/NON_HLA
 sample=/home/cocca/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_01%_r0.fq
@@ -1326,6 +1355,7 @@ not_typed_donor=/home/cocca/analyses/michelangelo/chimerismo/NON_HLA/test_090232
 #09/03/2019
 
 We need to test different combinations
+
 ```bash
 declare -A triplets=()
 # Set 1
@@ -1374,6 +1404,7 @@ done
 #10/03/2019
 
 Test with align rerun on R_100 after first alignment
+
 ```bash
 for s_name in RIC_0% RIC_100 
 do
@@ -1390,6 +1421,7 @@ done
 ```
 
 Test script 02:
+
 ```bash
 base_folder=~/analyses/michelangelo/chimerismo/NON_HLA
 sample=/home/cocca/analyses/michelangelo/chimerismo/06092018/FASTQ/RIC_01%_r0.fq
@@ -1408,11 +1440,13 @@ not_typed_donor=/home/cocca/analyses/michelangelo/chimerismo/NON_HLA/test_090232
 Try to downsample at 100x R_0 and R_100:
 *R_0 ~ 18000 RD
 *R_100 ~ 28000 RD
+
 ```bash
 samtools view -s 0.006 -b -o RIC_0%.bam ../RIC_0%.bam
 samtools view -s 0.004 -b -o RIC_100.bam ../RIC_100.bam
 ```
 now generate fastq data from the downsampled samples:
+
 ```bash
 for sample in RIC_0% RIC_100
 do 
@@ -1424,6 +1458,7 @@ done
 ```
 
 We need to test different combinations
+
 ```bash
 declare -A triplets=()
 # Set 1
@@ -1519,11 +1554,13 @@ done
 Try to downsample at 1000x R_0 and R_100:
 *R_0 ~ 18000 RD
 *R_100 ~ 28000 RD
+
 ```bash
 samtools view -s 0.06 -b -o RIC_0%.bam ../RIC_0%.bam
 samtools view -s 0.04 -b -o RIC_100.bam ../RIC_100.bam
 ```
 now generate fastq data from the downsampled samples:
+
 ```bash
 for sample in RIC_0% RIC_100
 do 
@@ -1589,6 +1626,7 @@ samtools view -s 0.28 -b -o RIC_0%.bam ../RIC_0%.bam
 samtools view -s 0.18 -b -o RIC_100.bam ../RIC_100.bam
 ```
 now generate fastq data from the downsampled samples:
+
 ```bash
 for sample in RIC_0% RIC_100
 do 
@@ -1650,6 +1688,7 @@ Downloaded new data from Torrent site
 
 /home/cocca/analyses/michelangelo/chimerismo/new_bams_5052019
 rename files:
+
 ```bash
 mv IonXpress_002_R_2019_05_09_09_30_00_user_SN2-758-Chimerismo_HLA_chip4_Auto_user_SN2-758-Chimerismo_HLA_chip4_1253.bam.bai DNA_13.bam.bai
 mv IonXpress_003_R_2019_05_09_09_30_00_user_SN2-758-Chimerismo_HLA_chip4_Auto_user_SN2-758-Chimerismo_HLA_chip4_1253.bam.bai DNA_11_PADRE.bam.bai
@@ -1667,6 +1706,7 @@ To get:
 * Sc_L_0.1.bam
 
 Need to get back to fastq:
+
 ```bash
 mkdir -p /home/cocca/analyses/michelangelo/chimerismo/new_bams_5052019/FASTQ
 
@@ -1680,6 +1720,7 @@ done
 ```
 
 Now run the scripts:
+
 ```bash
 A=DNA_13
 B=DNA_11_PADRE
@@ -1744,6 +1785,7 @@ done
 
 ---
 Check HLA HD options to use custom HLA reference
+
 ```bash
 declare -A triplets=()
 # Set 1 - Bianco
@@ -1805,6 +1847,7 @@ Downloaded new data from Torrent site
 /home/cocca/analyses/michelangelo/chimerismo/new_bams_5052019
 
 rename files:
+
 ```bash
 mv IonXpress_001_rawlib.basecaller.bam DNA_1_PADRE.bam
 mv IonXpress_002_rawlib.basecaller.bam DNA_2_MADRE.bam
@@ -1821,6 +1864,7 @@ To get:
 * Sc_E_0.1.bam
 
 Need to get back to fastq:
+
 ```bash
 mkdir -p /home/cocca/analyses/michelangelo/chimerismo/new_bams_5052019/FASTQ
 
@@ -1834,6 +1878,7 @@ done
 ```
 
 Now run the scripts:
+
 ```bash
 A=DNA_13
 B=DNA_11_PADRE
@@ -1957,6 +2002,7 @@ done
 #23/07/2019
 
 Run the first steps with a more relaxed het threshold:
+
 ```bash
 declare -A triplets=()
 # Set 1 - Bianco
@@ -2050,4 +2096,67 @@ Estrarre contig che sono a 0 nella chimera per controllare se sono tutti non inf
 fgrep -f <(cut -f 1 ~/analyses/michelangelo/chimerismo/NON_HLA/26062019/test_24072019181711/STRICT_NOCUSTOM/F_H_L/Sc_E_0.1_r0.fq_K/Sc_E_0.1_r0.fq_align_ric_100_res.counts) DNA_3_r0.fq_align_most_freq.counts <(fgrep -f <(cut -f 1 ~/analyses/michelangelo/chimerismo/NON_HLA/26062019/test_24072019181711/STRICT_NOCUSTOM/F_H_L/Sc_E_0.1_r0.fq_K/Sc_E_0.1_r0.fq_align_ric_100_res.counts) DNA_2_MADRE_r0.fq_align_most_freq.counts | cut -f 1 -d " ")
 ```
 
-https://docs.google.com/document/d/1UaRmimAe919IZYIH55mDXMe-4sHsRVqaP4moqx2IYE4/edit?usp=sharing
+---
+#9/11/2020
+
+##Some example commands
+
+
+First create some folders and populate them:
+
+```bash
+samples="/home/aloisio/analyses/chimeval/TGP_POPS"
+regions="/home/aloisio/analyses/chimeval/REG_TAB"
+
+mkdir -p ${samples} ${regions}
+
+cp /genedata/cocca/analyses/michelangelo/TGP_POPS/*.* ${samples}
+cp /genedata/cocca/analyses/michelangelo/REG_TAB/*.* ${regions}
+
+```
+
+
+```bash
+maf=0.45
+
+for maf in 0.01
+do
+
+for pop in ALL
+do
+
+for chr in {1..22}
+do
+
+TGP_input="/netapp/nfs/resources/1000GP_phase3/vcf/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz"
+subset_sample="/home/aloisio/analyses/chimeval/TGP_POPS/${pop}_samples_phase3.txt"
+region_list="/home/aloisio/analyses/chimeval/REG_TAB/NON_HLA_ALLARGATO.tab"
+
+
+prefix_filt=`date +"%d%m%Y%H"`
+out_d="/home/aloisio/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}"
+
+mkdir -p ${out_d}
+echo "/home/cocca/scripts/bash_scripts/hap_inform.sh ${TGP_input} ${out_d} LIST ${region_list} ${subset_sample} ${pop}"| qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N extract_LIST_${pop}_20bl_${chr} -o ${out_d}/\$JOB_ID_${pop}_${chr}.log -e ${out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G
+
+
+#extract info haps
+prefix=`date +"%d%m%Y%H"`
+hap_TGP_input=/home/aloisio/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.reg_list.${pop}.vcf.gz
+
+hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/REG_TAB/NON_HLA_ALLARGATO.txt"
+hap_out_d=/home/aloisio/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
+mkdir -p ${hap_out_d}
+
+for n_snp in 5
+do
+echo "${pop} ${chr}"
+
+echo "/home/cocca/scripts/bash_scripts/hap_inform_extract_reads.py -i ${hap_TGP_input} -n_snp ${n_snp} -chr ${chr} -pop ${pop} -o_path ${hap_out_d} -b_mode LIST -b_list ${hap_block_list} -amp_s 200 " | qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N hap_count_${pop}_${chr} -o ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log -e ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G -hold_jid extract_LIST_${pop}_20bl_${chr}
+
+
+done
+done
+done
+done
+```
