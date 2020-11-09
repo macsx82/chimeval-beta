@@ -2140,18 +2140,15 @@ echo "/home/cocca/scripts/bash_scripts/hap_inform.sh ${TGP_input} ${out_d} LIST 
 
 #extract info haps
 prefix=`date +"%d%m%Y%H"`
-hap_TGP_input=/home/aloisio/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.reg_list.${pop}.vcf.gz
-
-hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/REG_TAB/NON_HLA_ALLARGATO.txt"
+hap_TGP_input=${out_d}/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.reg_list.${pop}.vcf.gz
+hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/REG_TAB/NON_HLA_ALLARGATO.tab"
 hap_out_d=/home/aloisio/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
 mkdir -p ${hap_out_d}
 
 for n_snp in 5
 do
 echo "${pop} ${chr}"
-
 echo "/home/cocca/scripts/bash_scripts/hap_inform_extract_reads.py -i ${hap_TGP_input} -n_snp ${n_snp} -chr ${chr} -pop ${pop} -o_path ${hap_out_d} -b_mode LIST -b_list ${hap_block_list} -amp_s 200 " | qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N hap_count_${pop}_${chr} -o ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log -e ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G -hold_jid extract_LIST_${pop}_20bl_${chr}
-
 
 done
 done
