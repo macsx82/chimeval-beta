@@ -2145,10 +2145,11 @@ hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/REG_TAB/NON_HLA_ALLARGAT
 hap_out_d=/home/aloisio/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
 mkdir -p ${hap_out_d}
 
+#this version of the script is written in py2.7, so we need to activate the correct python conda environment
 for n_snp in 5
 do
 echo "${pop} ${chr}"
-echo "/home/cocca/scripts/bash_scripts/hap_inform_extract_reads.py -i ${hap_TGP_input} -n_snp ${n_snp} -chr ${chr} -pop ${pop} -o_path ${hap_out_d} -b_mode LIST -b_list ${hap_block_list} -amp_s 200 " | qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N hap_count_${pop}_${chr} -o ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log -e ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G -hold_jid extract_LIST_${pop}_20bl_${chr}
+echo "conda activate py27;/home/cocca/scripts/bash_scripts/hap_inform_extract_reads.py -i ${hap_TGP_input} -n_snp ${n_snp} -chr ${chr} -pop ${pop} -o_path ${hap_out_d} -b_mode LIST -b_list ${hap_block_list} -amp_s 200 " | qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N hap_count_${pop}_${chr} -o ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log -e ${hap_out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G -hold_jid extract_LIST_${pop}_20bl_${chr}
 
 done
 done
