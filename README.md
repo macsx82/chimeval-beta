@@ -2141,7 +2141,7 @@ echo "/home/cocca/scripts/bash_scripts/hap_inform.sh ${TGP_input} ${out_d} LIST 
 #extract info haps
 prefix=`date +"%d%m%Y%H"`
 hap_TGP_input=${out_d}/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.reg_list.${pop}.vcf.gz
-hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/REG_TAB/NON_HLA_ALLARGATO.tab"
+hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/NON_HLA_ALLARGATO.tab"
 hap_out_d=/home/aloisio/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
 mkdir -p ${hap_out_d}
 
