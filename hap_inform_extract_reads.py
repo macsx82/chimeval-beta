@@ -70,6 +70,7 @@ for line in current_file:
 		geno=[w.replace('0', site[3]) for w in geno]
 		if re.match(',',site[4]):
 		# if len(site[4]) > 1:
+			print site[4]
 			multi=site[4].split(',')
 			for n_alt in xrange(1,len(multi)):
 				geno=[w.replace(n_alt, multi[n_alt-1]) for w in geno]
