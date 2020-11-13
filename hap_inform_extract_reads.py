@@ -72,6 +72,7 @@ for line in current_file:
 		# if len(site[4]) > 1:
 			print site[4]
 			multi=site[4].split(',')
+			print len(multi)
 			for n_alt in xrange(1,len(multi)):
 				geno=[w.replace(str(n_alt), multi[n_alt-1]) for w in geno]
 				# pass
