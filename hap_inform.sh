@@ -16,7 +16,8 @@ case $mode in
 		basename_out=`basename ${TGP_input}`
 		#only on biallelic snps
 		# bcftools view -R ${region_list} -m2 -M2 -v snps -S ${subset_sample} ${TGP_input} -O z -o ${base_out}/${basename_out}.reg_list.${pop}.vcf.gz 
-		bcftools view -R ${region_list} -m2 -M2 -S ${subset_sample} ${TGP_input} -O z -o ${base_out}/${basename_out}.reg_list.${pop}.vcf.gz 
+		# bcftools view -R ${region_list} -m2 -M2 -S ${subset_sample} ${TGP_input} -O z -o ${base_out}/${basename_out}.reg_list.${pop}.vcf.gz 
+		bcftools view -R ${region_list} -S ${subset_sample} ${TGP_input} -O z -o ${base_out}/${basename_out}.reg_list.${pop}.vcf.gz 
 	
 	;;
 	FREQ )
