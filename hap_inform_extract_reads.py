@@ -68,10 +68,13 @@ for line in current_file:
 		geno=site[9:]
 		# need to take care of multiallelic sites
 		geno=[w.replace('0', site[3]) for w in geno]
-		if len(site[4]) > 1:
+		if re.match(',',site[4]):
+		# if len(site[4]) > 1:
 			multi=site[4].split(',')
-			geno=[w.replace('1', multi[0]) for w in geno]
-			geno=[w.replace('2', multi[1]) for w in geno]
+			for n_alt in xrange(1,len(multi)):
+				geno=[w.replace(n_alt, multi[n_alt-1]) for w in geno]
+				# pass
+			# geno=[w.replace('2', multi[1]) for w in geno]
 			# multi_geno=site
 		else:
 			geno=[w.replace('1', site[4]) for w in geno]

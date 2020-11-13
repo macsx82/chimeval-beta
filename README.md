@@ -2133,7 +2133,8 @@ region_list="/home/aloisio/analyses/chimeval/REG_TAB/NON_HLA_ALLARGATO.tab"
 
 prefix_filt=`date +"%d%m%Y%H"`
 # out_d="/home/aloisio/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}"
-out_d="/home/cocca/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}"
+# out_d="/home/cocca/analyses/chimeval/${prefix_filt}_MAF_MICHILIST/${pop}"
+out_d="/home/cocca/analyses/chimeval/${prefix_filt}_MAF_MICHILIST_INDEL/${pop}"
 
 mkdir -p ${out_d}
 echo "/home/cocca/scripts/pipelines/chimeval-beta/hap_inform.sh ${TGP_input} ${out_d} LIST ${region_list} ${subset_sample} ${pop}"| qsub -m ea -M michelangelo.aloisio@burlo.trieste.it -N extract_LIST_${pop}_20bl_${chr} -o ${out_d}/\$JOB_ID_${pop}_${chr}.log -e ${out_d}/\$JOB_ID_${pop}_${chr}.log.e -V -l h_vmem=5G
@@ -2143,7 +2144,8 @@ echo "/home/cocca/scripts/pipelines/chimeval-beta/hap_inform.sh ${TGP_input} ${o
 prefix=`date +"%d%m%Y%H"`
 hap_TGP_input=${out_d}/ALL.chr${chr}.phase3_shapeit2_mvncall_integrated_v5a.20130502.genotypes.vcf.gz.reg_list.${pop}.vcf.gz
 hap_block_list="/home/aloisio/analyses/chimeval/REG_TAB/NON_HLA_ALLARGATO.tab"
-hap_out_d=/home/cocca/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
+# hap_out_d=/home/cocca/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_blocks/${pop}/
+hap_out_d=/home/cocca/analyses/chimeval/${prefix}_${maf}_MAF_MICHILIST_INDEL_blocks/${pop}/
 mkdir -p ${hap_out_d}
 
 #this version of the script is written in py2.7, so we need to activate the correct python conda environment
