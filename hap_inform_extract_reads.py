@@ -70,14 +70,12 @@ for line in current_file:
 		geno=[w.replace('0', site[3]) for w in geno]
 		if re.search(',',site[4]):
 		# if len(site[4]) > 1:
-			print site[4]
 			multi=site[4].split(',')
-			print len(multi)
-			for n_alt in xrange(1,len(multi)):
+			for n_alt in xrange(1,len(multi)+1):
 				print multi[n_alt-1]
-				c_geno=[w.replace(str(n_alt), multi[n_alt-1]) for w in geno]
-				print c_geno
-				geno=c_geno
+				geno=[w.replace(str(n_alt), multi[n_alt-1]) for w in geno]
+				# print c_geno
+				# geno=c_geno
 				# print geno
 				# pass
 			# geno=[w.replace('2', multi[1]) for w in geno]
