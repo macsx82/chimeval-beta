@@ -93,7 +93,7 @@ print "Vcf file read!"
 print "Creating blocks list...."
 if block_mode == 'ALL':
 	# Create a list of blocks
-	#Mode 1:
+	#Mode 1
 	all_rs_list=[]
 	rs_list=[]
 	i=0
@@ -231,13 +231,9 @@ print "Done writing haps frequencies file!"
 #function to extract informativeness of each haplotype in a block
 def info_hap(h1,h2):
 	info_h1=0
-	# info_r1_h1_r1_h2=0
-	# info_r1_h1_r2_h2=0
-	# info_r2_h1_r1_h2=0
-	# info_r2_h1_r2_h2=0
+	# we can compare haplotypes only if the size is the same
 	if len(h1) == len(h2):
 		#first extract the first read from h1
-		# r1_h1=[x[0] for x in h1]
 		# r2_h1=[x[2] for x in h1]
 		# r1_h2=[x[0] for x in h2]
 		# r2_h2=[x[2] for x in h2]
@@ -258,6 +254,7 @@ def info_hap(h1,h2):
 				# if len(list(set(h2[snp_h].split("|")))) == 2:
 					#here we don't add informativeness
 			elif len(list(set(h1[snp_h].split("|")))) == 2:
+				#here we are in the het -> hom state, informative only if the other allele is in hom state
 				if len(list(set(h2[snp_h].split("|")))) == 1:
 					info_h1+=1
 				# if len(list(set(h2[snp_h].split("|")))) == 2:
@@ -275,12 +272,13 @@ def info_hap_reads(h1,h2):
 	info_r2_h1_r2_h2=0
 	info_r2_h1_r1_h1=0
 
+	# we can compare haplotypes only if the size is the same
 	if len(h1) == len(h2):
-		#first extract the first read from h1
-		r1_h1=[x[0] for x in h1]
-		r2_h1=[x[2] for x in h1]
-		r1_h2=[x[0] for x in h2]
-		r2_h2=[x[2] for x in h2]
+		# split the reads in each haplotype
+		r1_h1=[x.split("|")[0] for x in h1]
+		r2_h1=[x.split("|")[1] for x in h1]
+		r1_h2=[x.split("|")[0] for x in h2]
+		r2_h2=[x.split("|")[1] for x in h2]
 		for snp_h in range(0,len(h1)):
 			if r1_h1[snp_h] != r1_h2[snp_h]:
 				info_r1_h1_r1_h2+=1
