@@ -233,34 +233,16 @@ def info_hap(h1,h2):
 	info_h1=0
 	# we can compare haplotypes only if the size is the same
 	if len(h1) == len(h2):
-		#first extract the first read from h1
-		# r2_h1=[x[2] for x in h1]
-		# r1_h2=[x[0] for x in h2]
-		# r2_h2=[x[2] for x in h2]
 		for snp_h in range(0,len(h1)):
-			# if r1_h1[snp_h] != r1_h2[snp_h]:
-			# 	info_r1_h1_r1_h2+=1
-			# if r1_h1[snp_h] != r2_h2[snp_h]:
-			# 	info_r1_h1_r2_h2+=1
-			# if r2_h1[snp_h] != r1_h2[snp_h]:
-			# 	info_r2_h1_r1_h2+=1
-			# if r2_h1[snp_h] != r2_h2[snp_h]:
-			# 	info_r2_h1_r2_h2+=1
 			if len(list(set(h1[snp_h].split("|")))) == 1:
 				if len(list(set(h2[snp_h].split("|")))) == 1:
 					#here we are in the hom -> hom state, informative only if the alleles are different
 					if h1[snp_h] != h2[snp_h]:
 						info_h1+=1
-				# if len(list(set(h2[snp_h].split("|")))) == 2:
-					#here we don't add informativeness
 			elif len(list(set(h1[snp_h].split("|")))) == 2:
 				#here we are in the het -> hom state, informative only if the other allele is in hom state
 				if len(list(set(h2[snp_h].split("|")))) == 1:
 					info_h1+=1
-				# if len(list(set(h2[snp_h].split("|")))) == 2:
-					#here we don't add informativeness
-	#return data for informativenss and the reads correlated
-	# return info_r1_h1_r1_h2,info_r1_h1_r2_h2,info_r2_h1_r1_h2,info_r2_h1_r2_h2,r1_h1,r2_h1,r1_h2,r2_h2
 	return info_h1
 
 
@@ -292,21 +274,8 @@ def info_hap_reads(h1,h2):
 				info_r2_h1_r2_h2+=1
 			if r2_h1[snp_h] != r1_h1[snp_h]:
 				info_r2_h1_r1_h1+=1
-			# if len(list(set(h1[snp_h].split("|")))) == 1:
-			# 	if len(list(set(h2[snp_h].split("|")))) == 1:
-			# 		#here we are in the hom -> hom state, informative only if the alleles are different
-			# 		if h1[snp_h] != h2[snp_h]:
-			# 			info_h1+=1
-			# 	# if len(list(set(h2[snp_h].split("|")))) == 2:
-			# 		#here we don't add informativeness
-			# elif len(list(set(h1[snp_h].split("|")))) == 2:
-			# 	if len(list(set(h2[snp_h].split("|")))) == 1:
-			# 		info_h1+=1
-				# if len(list(set(h2[snp_h].split("|")))) == 2:
-					#here we don't add informativeness
 	#return data for informativenss and the reads correlated
 	return info_r1_h1_r1_h2,info_r1_h1_r2_h2,info_r2_h1_r1_h2,info_r2_h1_r2_h2,r1_h1,r2_h1,r1_h2,r2_h2,info_r1_h1_r2_h1,info_r2_h1_r1_h1
-	# return info_h1
 
 print "Calculate haps informativeness..."
 haps_sig=collections.defaultdict(lambda: collections.defaultdict(lambda: collections.defaultdict(list)))
@@ -319,43 +288,11 @@ for block in haps_freq.keys():
 		#take the first haplotype and compare it with the other
 		for j in range(0,len(haps_freq[block].keys())):
 			if haps_freq[block].keys()[h] != haps_freq[block].keys()[j]:
-				# print len(haps_freq[block].keys()[h])
-				# print len(haps_freq[block].keys()[j])
 				hap_info_r1_h1_r1_h2,hap_info_r1_h1_r2_h2,hap_info_r2_h1_r1_h2,hap_info_r2_h1_r2_h2,h_r1,h_r2,h2_r1,h2_r2,hap_info_r1_h1_r2_h1,hap_info_r2_h1_r1_h1 =info_hap_reads(haps_freq[block].keys()[h],haps_freq[block].keys()[j])
-				# hap_info_r1_h1_r1_h2,hap_info_r1_h1_r2_h2,hap_info_r2_h1_r1_h2,hap_info_r2_h1_r2_h2,h_r1,h_r2=info_hap(haps_freq[block].keys()[h],haps_freq[block].keys()[j])
-				# hap_info=info_hap(haps_freq[block].keys()[h],haps_freq[block].keys()[j])
 				#calculate frequencies if hap_info is  >= 3 
 				h1_fr=len(haps_freq[block][haps_freq[block].keys()[h]])/float(samples)
 				h2_fr=len(haps_freq[block][haps_freq[block].keys()[j]])/float(samples)					
 				h_freq= h1_fr * h2_fr
-				# h_freqs.append(h_freq)
-				# if hap_info_r1_h1_r1_h2 >= 3 | hap_info_r1_h1_r2_h2 >= 3:
-				# if hap_info >= 5:
-					# haps_sig[block][haps_freq[block].keys()[h]].append(h_freq)
-					# haps_sig[block][haps_freq[block].keys()[h]][tuple(haps_freq[block].keys()[j])].append(h_freq)
-				# if hap_info_r1_h1_r1_h2 >= 3:
-				# 	haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h_freq)
-			 # 	else:
-			 # 		if hap_info_r1_h1_r2_h2 >= 3:
-				# 		haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h_freq)
-				# if hap_info_r1_h1_r1_h2 >= 3:
-				# 	haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h_freq)
-			 # 	else:
-			 # 		if hap_info_r1_h1_r2_h2 >= 3:
-				# 		haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h_freq)
-				# 	else:
-				# 		# if a read from the receiver is informative with respect to both the 
-				# 		# elif hap_info_r2_h1_r1_h2 >= 3 | hap_info_r2_h1_r2_h2 >= 3:
-				# 		if hap_info_r2_h1_r1_h2 >= 3:
-				# 			haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r2)].append(h_freq)
-				# 		else:
-				# 			if hap_info_r2_h1_r2_h2 >= 3:
-				# 				haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r2)].append(h_freq)
-				# if hap_info_r1_h1_r1_h2 >= 3 and hap_info_r1_h1_r2_h2 >= 3 :
-				# 	haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h_freq)
-				# else:
-				# 	if hap_info_r2_h1_r1_h2 >= 3 and hap_info_r2_h1_r2_h2 >= 3:
-				# 		haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r2)].append(h_freq)
 
 				#19/01/2018: modified how to select the informative read! two cases: 1) both reads are informative 2) only one is informative
 				# in the second case, we'll compare the two ric reads and we'll keep the read only if it's informative against the other one
@@ -371,27 +308,12 @@ for block in haps_freq.keys():
 						if hap_info_r2_h1_r1_h1 >= 3:
 							haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r2)].append(h_freq)
 
-				# if hap_info_r1 >= 3:
-				# 	haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r1)].append(h1_fr)
-				# elif hap_info_r2 >= 3:
-				# 	haps_sig[block][haps_freq[block].keys()[h]][tuple(h_r2)].append(h1_fr)
-				# haps_sig[block][haps_freq[block].keys()[h]].append(hap_info)
-			#now for each haplotype, remove duplicate info
-			# if max(list(set(haps_sig[block][haps_freq[block].keys()[h]]))) >= 5:
-				#we'll select this haplotype in this block and we'll print out the info
-				# haps_selected[block][haps_freq[block].keys()[h]] = list(set(haps_sig[block][haps_freq[block].keys()[h]]))
 
 print "DONE Calculate haps informativeness!"
 #CALCULATE CUMULATIVE FREQUENCIES: GET FREQUENCY of each haplotype during comparison, and if haps_info >= 3,
  # keep the freqm than multiply with the second hap, the num all together
 #now , lets print out the blocks with their haps and haps frequecies
 haps_blocks_sig=open('%s/%s_chr%s_%s_snps_block_sig.txt' %(out_dir,pop,chrom,n_snp), 'w')
-# print >> haps_blocks_sig,'block\thaplotype\thaplotype_2\tsig_values\tblock_sig'
-# for b in haps_sig:
-# 	block_sig=[s for w in haps_sig[b] for k in haps_sig[b][w] for s in haps_sig[b][w][k]]
-# 	for hap in haps_sig[b]:
-# 		for h_read in haps_sig[b][hap]:
-# 			print >> haps_blocks_sig, '%s\t%s\t%s\t%s\t%s' %(b,hap,h_read,sum(haps_sig[b][hap][h_read]),sum(block_sig))
 print >> haps_blocks_sig,'block\thaplotype\tread\tsig_values\tblock_sig'
 for b in haps_sig:
 	block_sig=[z for w in haps_sig[b] for k in haps_sig[b][w] for z in haps_sig[b][w][k] ]
@@ -402,4 +324,3 @@ for b in haps_sig:
 haps_blocks_sig.close()
 
 print "DONE writing haps informativeness files!"
-# print(all_rs_list)
